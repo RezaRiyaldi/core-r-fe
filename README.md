@@ -140,12 +140,16 @@ src/
   - `GET /api/auth/me` → `UserSuccessResponse` dengan `roles[]` dan `permissions[]`
 - [x] Build produksi berhasil (exit 0)
 
-### 🔲 Fase 3 — Autentikasi dan izin
+### ✅ Fase 3 — Autentikasi dan izin (selesai)
 
-- [ ] Konfirmasi kontrak `POST /auth/login` dan `GET /auth/me`
-- [ ] Auth store Pinia + layanan autentikasi
-- [ ] Login, logout, pemulihan sesi
-- [ ] Route guard + helper izin
+- [x] `src/stores/auth.ts` — Pinia auth store: `login`, `logout`, `fetchCurrentUser`, `hasPermission`, `hasRole`, `hasAnyPermission`
+- [x] Session restore otomatis di route guard (satu kali, dari `localStorage`)
+- [x] `src/router/index.ts` — route guard `requiresAuth`, `requiresGuest`, `permission`
+- [x] `src/modules/auth/views/LoginView.vue` — form login dengan error handling 401/422
+- [x] `src/modules/dashboard/views/DashboardView.vue` — placeholder dashboard
+- [x] `src/api/client.ts` — interceptor 401: clear token + redirect ke `/login`
+- [x] i18n: tambah `invalidCredentials`, `welcome`
+- [x] Build produksi berhasil (exit 0)
 
 ### 🔲 Fase 4 — Kerangka aplikasi
 

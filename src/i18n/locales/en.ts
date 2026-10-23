@@ -8,6 +8,7 @@ export default {
     email: 'Email',
     password: 'Password',
     loginButton: 'Sign in',
+    invalidCredentials: 'Invalid email or password.',
   },
   common: {
     save: 'Save',
@@ -20,5 +21,6 @@ export default {
     empty: 'No data',
     error: 'An error occurred',
     confirm: 'Confirm',
+    welcome: 'Welcome, {name}',
   },
 }

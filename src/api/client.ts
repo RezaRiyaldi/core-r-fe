@@ -24,7 +24,13 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    // ponytail: token refresh / redirect on 401 — add when auth store exists
+    if (error.response?.status === 401) {
+      // Clear token dan redirect ke login — hindari import circular dengan router
+      localStorage.removeItem('auth_token')
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login'
+      }
+    }
     return Promise.reject(error)
   },
 )

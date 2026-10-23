@@ -8,6 +8,7 @@ export default {
     email: 'Email',
     password: 'Kata sandi',
     loginButton: 'Masuk',
+    invalidCredentials: 'Email atau kata sandi salah.',
   },
   common: {
     save: 'Simpan',
@@ -20,5 +21,6 @@ export default {
     empty: 'Tidak ada data',
     error: 'Terjadi kesalahan',
     confirm: 'Konfirmasi',
+    welcome: 'Selamat datang, {name}',
   },
 }
