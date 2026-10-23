@@ -38,6 +38,7 @@ export default {
     roles: 'Peran',
     permissions: 'Izin',
     createdAt: 'Dibuat',
+    back: 'Kembali',
   },
   error: {
     forbidden: 'Anda tidak memiliki izin untuk melakukan tindakan ini.',
@@ -50,6 +51,8 @@ export default {
     editStatus: 'Ubah status',
     editRoles: 'Kelola peran',
     createTitle: 'Buat pengguna',
+    detailTitle: 'Detail Pengguna',
+    info: 'Info Pengguna',
     statusActive: 'Aktif',
     statusSuspended: 'Ditangguhkan',
     password: 'Kata sandi',
@@ -59,6 +62,10 @@ export default {
     createdSuccess: 'Pengguna berhasil dibuat.',
     statusUpdated: 'Status berhasil diperbarui.',
     rolesUpdated: 'Peran berhasil diperbarui.',
+    noRoles: 'Tidak ada peran.',
+    noPermissions: 'Tidak ada izin.',
+    activeTokens: 'Token aktif',
+    lastLogin: 'Login terakhir',
   },
   roles: {
     title: 'Peran',
@@ -94,6 +101,11 @@ export default {
     subject: 'Subjek',
     ip: 'Alamat IP',
     filterEvent: 'Filter berdasarkan event',
+  },
+  settings: {
+    title: 'Pengaturan',
+    description: 'Kelola pengaturan aplikasi.',
+    savedSuccess: 'Pengaturan berhasil disimpan.',
   },
 }
 

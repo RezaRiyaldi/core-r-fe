@@ -45,6 +45,12 @@ const router = createRouter({
           meta: { requiresAuth: true, permission: 'users.view', breadcrumb: 'Users' },
         },
         {
+          path: 'users/:id',
+          name: 'user-detail',
+          component: () => import('@/modules/users/views/UserDetailView.vue'),
+          meta: { requiresAuth: true, permission: 'users.view', breadcrumb: 'User Detail' },
+        },
+        {
           path: 'roles',
           name: 'roles',
           component: () => import('@/modules/roles/views/RolesListView.vue'),
@@ -59,7 +65,7 @@ const router = createRouter({
         {
           path: 'settings',
           name: 'settings',
-          component: () => import('@/modules/dashboard/views/DashboardView.vue'),
+          component: () => import('@/modules/settings/views/SettingsView.vue'),
           meta: { requiresAuth: true, permission: 'settings.view', breadcrumb: 'Settings' },
         },
         {

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
@@ -14,6 +15,7 @@ import type { UserListItem } from '@/api/generated/models'
 const { t } = useI18n()
 const toast = useToast()
 const confirm = useConfirm()
+const router = useRouter()
 const store = useUsersStore()
 
 const showCreateDialog = ref(false)
@@ -126,6 +128,13 @@ function onUserCreated() {
       </Column>
       <Column :header="t('common.actions')">
         <template #body="{ data }">
+          <Button
+            :label="t('common.edit')"
+            size="small"
+            text
+            severity="secondary"
+            @click="router.push({ name: 'user-detail', params: { id: data.id } })"
+          />
           <Button
             :label="t('users.editStatus')"
             size="small"

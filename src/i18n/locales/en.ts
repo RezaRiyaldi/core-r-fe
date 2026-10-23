@@ -38,6 +38,7 @@ export default {
     roles: 'Roles',
     permissions: 'Permissions',
     createdAt: 'Created',
+    back: 'Back',
   },
   error: {
     forbidden: 'You do not have permission to perform this action.',
@@ -50,6 +51,8 @@ export default {
     editStatus: 'Change status',
     editRoles: 'Manage roles',
     createTitle: 'Create user',
+    detailTitle: 'User Detail',
+    info: 'User Info',
     statusActive: 'Active',
     statusSuspended: 'Suspended',
     password: 'Password',
@@ -59,6 +62,10 @@ export default {
     createdSuccess: 'User created.',
     statusUpdated: 'Status updated.',
     rolesUpdated: 'Roles updated.',
+    noRoles: 'No roles assigned.',
+    noPermissions: 'No permissions.',
+    activeTokens: 'Active tokens',
+    lastLogin: 'Last login',
   },
   roles: {
     title: 'Roles',
@@ -94,6 +101,11 @@ export default {
     subject: 'Subject',
     ip: 'IP Address',
     filterEvent: 'Filter by event',
+  },
+  settings: {
+    title: 'Settings',
+    description: 'Manage application settings.',
+    savedSuccess: 'Settings saved.',
   },
 }
 

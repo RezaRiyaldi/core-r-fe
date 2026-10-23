@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
+import { useNotificationsStore } from '@/modules/notifications/store'
 import { navigation } from '@/config/navigation'
 
 const router = useRouter()
 const route = useRoute()
 const auth = useAuthStore()
+const notificationsStore = useNotificationsStore()
 const { t, locale } = useI18n()
 
 const sidebarOpen = ref(true)
@@ -33,6 +35,10 @@ async function handleLogout() {
   await auth.logout()
   router.push({ name: 'login' })
 }
+
+onMounted(() => {
+  notificationsStore.fetchUnreadCount()
+})
 </script>
 
 <template>
@@ -103,6 +109,22 @@ async function handleLogout() {
           class="flex-1 border-none p-0 bg-transparent"
         />
         <div v-else class="flex-1" />
+
+        <!-- Notifications bell -->
+        <RouterLink :to="{ name: 'notifications' }" class="relative inline-flex">
+          <Button
+            icon="pi pi-bell"
+            text
+            severity="secondary"
+            :aria-label="t('nav.notifications')"
+          />
+          <Badge
+            v-if="notificationsStore.unreadCount > 0"
+            :value="notificationsStore.unreadCount > 99 ? '99+' : String(notificationsStore.unreadCount)"
+            severity="danger"
+            class="absolute -top-1 -right-1 !text-xs !min-w-4 !h-4 !leading-4 pointer-events-none"
+          />
+        </RouterLink>
 
         <!-- Locale switcher -->
         <Button
