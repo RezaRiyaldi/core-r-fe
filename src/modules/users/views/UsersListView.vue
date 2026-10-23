@@ -37,16 +37,15 @@ function onPage(event: DataTablePageEvent) {
   store.fetchUsers({ search: search.value || undefined })
 }
 
-function confirmToggleStatus(user: UserListItem) {
-  const isSuspended = user.status === 'suspended'
+function confirmToggleStatus(user: UserListItem, shouldActivate: boolean) {
   confirm.require({
-    message: isSuspended ? t('users.confirmActivate') : t('users.confirmSuspend'),
+    message: shouldActivate ? t('users.confirmActivate') : t('users.confirmSuspend'),
     header: t('common.confirm'),
     icon: 'pi pi-exclamation-triangle',
-    acceptClass: isSuspended ? '' : 'p-button-danger',
+    acceptClass: shouldActivate ? '' : 'p-button-danger',
     accept: async () => {
       try {
-        await store.updateUserStatus(user.id, isSuspended ? 'active' : 'suspended')
+        await store.updateUserStatus(user.id, shouldActivate ? 'active' : 'suspended')
         toast.add({ severity: 'success', summary: t('users.statusUpdated'), life: 3000 })
       } catch {
         toast.add({ severity: 'error', summary: t('common.error'), life: 4000 })
@@ -73,13 +72,13 @@ function onUserCreated() {
       </template>
     </PageHeader>
 
-    <div class="mb-4">
-      <IconField>
+    <div class="table-toolbar">
+      <IconField class="table-search">
         <InputIcon class="pi pi-search" />
         <InputText
           v-model="search"
           :placeholder="t('common.search')"
-          class="w-full sm:w-80"
+          class="w-full"
           @input="onSearch"
         />
       </IconField>
@@ -101,6 +100,9 @@ function onUserCreated() {
       @page="onPage"
       class="w-full"
     >
+      <Column header="#" style="width: 4.5rem">
+        <template #body="{ index }">{{ (store.pagination.page - 1) * store.pagination.perPage + index + 1 }}</template>
+      </Column>
       <template #empty>
         <div class="py-8 text-center text-surface-500">{{ t('common.empty') }}</div>
       </template>
@@ -120,28 +122,24 @@ function onUserCreated() {
       </Column>
       <Column field="status" :header="t('common.status')">
         <template #body="{ data }">
-          <Tag
-            :value="data.status === 'active' ? t('users.statusActive') : t('users.statusSuspended')"
-            :severity="data.status === 'active' ? 'success' : 'warn'"
-          />
+          <div class="flex items-center gap-3">
+            <ToggleSwitch
+              :model-value="data.status === 'active'"
+              :aria-label="data.status === 'active' ? t('users.statusActive') : t('users.statusSuspended')"
+              @update:model-value="(value) => confirmToggleStatus(data, value)"
+            />
+            <span :class="['text-xs font-semibold', data.status === 'active' ? 'text-emerald-700' : 'text-slate-400']">
+              {{ data.status === 'active' ? t('users.statusActive') : t('users.statusSuspended') }}
+            </span>
+          </div>
         </template>
       </Column>
       <Column :header="t('common.actions')">
         <template #body="{ data }">
-          <Button
-            :label="t('common.edit')"
-            size="small"
-            text
-            severity="secondary"
-            @click="router.push({ name: 'user-detail', params: { id: data.id } })"
-          />
-          <Button
-            :label="t('users.editStatus')"
-            size="small"
-            text
-            severity="secondary"
-            @click="confirmToggleStatus(data)"
-          />
+          <div class="flex flex-wrap gap-1">
+            <Button :label="t('common.detail')" icon="pi pi-eye" size="small" text severity="secondary" @click="router.push({ name: 'user-detail', params: { id: data.id } })" />
+            <Button :label="t('common.edit')" icon="pi pi-pencil" size="small" text severity="secondary" @click="router.push({ name: 'user-edit', params: { id: data.id } })" />
+          </div>
         </template>
       </Column>
     </DataTable>

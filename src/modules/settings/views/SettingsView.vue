@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
 import { useSettingsStore } from '../store'
@@ -10,23 +10,31 @@ import ApiErrorMessage from '@/components/shared/ApiErrorMessage.vue'
 const { t } = useI18n()
 const toast = useToast()
 const store = useSettingsStore()
-
 const form = ref<Record<string, unknown>>({})
 const isDirty = ref(false)
 
+const editableSettings = computed(() => store.metadata.filter((item) => item.editable && item.key))
+const longTextKeys = computed(() => new Set(store.metadata.filter((item) => {
+  const value = (item as { value?: unknown }).value
+  return item.editable && item.key && typeof value === 'string' && value.length > 60
+}).map((item) => item.key!)))
+const settingGroups = computed(() => {
+  const groups = new Map<string, typeof editableSettings.value>()
+  for (const item of editableSettings.value) {
+    const group = item.group || 'general'
+    groups.set(group, [...(groups.get(group) ?? []), item])
+  }
+  return Array.from(groups, ([name, items]) => ({ name, items }))
+})
+
 onMounted(async () => {
   await store.fetchMetadata()
-  // Populate form dari metadata
   store.metadata.forEach((item) => {
-    if (item.key && item.editable) {
-      form.value[item.key] = item.value ?? item.default ?? null
-    }
+    if (item.key && item.editable) form.value[item.key] = item.value ?? item.default ?? null
   })
 })
 
-function onInput() {
-  isDirty.value = true
-}
+function onInput() { isDirty.value = true }
 
 async function save() {
   try {
@@ -40,61 +48,72 @@ async function save() {
 </script>
 
 <template>
-  <div>
+  <div class="settings-page">
     <PageHeader :title="t('settings.title')" :description="t('settings.description')">
       <template #actions>
-        <Button
-          :label="t('common.save')"
-          icon="pi pi-check"
-          :loading="store.saving"
-          :disabled="!isDirty"
-          @click="save"
-        />
+        <Button :label="t('common.save')" icon="pi pi-check" :loading="store.saving" :disabled="!isDirty" @click="save" />
       </template>
     </PageHeader>
 
     <LoadingState v-if="store.loading" />
-
     <ApiErrorMessage v-else-if="store.error" :error="store.error" />
 
-    <div v-else class="max-w-2xl flex flex-col gap-6">
-      <template v-for="item in store.metadata" :key="item.key">
-        <div v-if="item.editable && item.key" class="flex flex-col gap-1">
-          <label class="text-sm font-medium text-surface-700">
-            {{ item.key }}
-            <span v-if="item.description" class="ml-1 text-xs text-surface-400 font-normal">
-              — {{ item.description }}
-            </span>
-          </label>
+    <div v-else-if="editableSettings.length" class="settings-layout">
+      <aside class="settings-aside">
+        <div class="settings-aside-icon"><i class="pi pi-sliders-h" /></div>
+        <h2>{{ t('settings.preferencesTitle') }}</h2>
+        <p>{{ t('settings.preferencesDescription') }}</p>
+        <div class="settings-aside-note"><i class="pi pi-info-circle" /><span>{{ t('settings.saveHint') }}</span></div>
+      </aside>
 
-          <!-- Boolean toggle -->
-          <ToggleSwitch
-            v-if="item.type === 'boolean'"
-            v-model="(form as Record<string, boolean>)[item.key]"
-            @change="onInput"
-          />
-
-          <!-- Number input -->
-          <InputNumber
-            v-else-if="item.type === 'integer' || item.type === 'number'"
-            v-model="(form as Record<string, number>)[item.key]"
-            class="w-48"
-            @input="onInput"
-          />
-
-          <!-- Default: string input -->
-          <InputText
-            v-else
-            v-model="(form as Record<string, string>)[item.key]"
-            class="w-full"
-            @input="onInput"
-          />
-        </div>
-      </template>
-
-      <div v-if="!store.metadata.some((m) => m.editable)" class="py-8 text-center text-surface-500">
-        {{ t('common.empty') }}
+      <div class="settings-groups">
+        <section v-for="group in settingGroups" :key="group.name" class="settings-group">
+          <header class="settings-group-header">
+            <div class="settings-group-icon"><i class="pi pi-cog" /></div>
+            <div><p class="settings-group-kicker">{{ t('settings.groupLabel') }}</p><h2>{{ group.name }}</h2></div>
+            <span class="settings-group-count">{{ group.items.length }}</span>
+          </header>
+          <div class="settings-fields">
+            <div v-for="item in group.items" :key="item.key" class="setting-row">
+              <div class="setting-copy">
+                <label :for="`setting-${item.key}`" class="form-label">{{ item.key }}</label>
+                <p v-if="item.description" class="setting-description">{{ item.description }}</p>
+                <span class="setting-source"><i class="pi pi-database" /> {{ item.source || item.type }}</span>
+              </div>
+              <div class="setting-control">
+                <div v-if="item.type === 'boolean'" class="setting-switch-wrap">
+                  <ToggleSwitch :input-id="`setting-${item.key}`" v-model="(form as Record<string, boolean>)[item.key!]" @change="onInput" />
+                  <span class="setting-switch-state">{{ (form as Record<string, boolean>)[item.key!] ? t('common.enabled') : t('common.disabled') }}</span>
+                </div>
+                <InputNumber
+                  v-else-if="item.type === 'integer' || item.type === 'number'"
+                  :input-id="`setting-${item.key}`"
+                  v-model="(form as Record<string, number>)[item.key!]"
+                  class="w-full sm:max-w-[220px]"
+                  @input="onInput"
+                />
+                <Textarea
+                  v-else-if="longTextKeys.has(item.key!)"
+                  :id="`setting-${item.key}`"
+                  v-model="(form as Record<string, string>)[item.key!]"
+                  class="w-full sm:max-w-[400px]"
+                  auto-resize
+                  rows="2"
+                  @input="onInput"
+                />
+                <InputText
+                  v-else
+                  :id="`setting-${item.key}`"
+                  v-model="(form as Record<string, string>)[item.key!]"
+                  class="w-full sm:max-w-[340px]"
+                  @input="onInput"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
+    <div v-else class="settings-empty"><span class="settings-empty-icon"><i class="pi pi-sliders-h" /></span><h2>{{ t('settings.noEditableTitle') }}</h2><p>{{ t('settings.noEditableDescription') }}</p></div>
   </div>
 </template>

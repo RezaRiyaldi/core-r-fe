@@ -11,6 +11,7 @@ import ApiErrorMessage from '@/components/shared/ApiErrorMessage.vue'
 import CreateRoleDialog from '../components/CreateRoleDialog.vue'
 import EditRoleDialog from '../components/EditRoleDialog.vue'
 import type { RoleItem } from '@/api/generated/models'
+import { formatDate } from '@/utils/date'
 
 const { t } = useI18n()
 const toast = useToast()
@@ -73,13 +74,13 @@ function onUpdated() {
       </template>
     </PageHeader>
 
-    <div class="mb-4">
-      <IconField>
+    <div class="table-toolbar">
+      <IconField class="table-search">
         <InputIcon class="pi pi-search" />
         <InputText
           v-model="search"
           :placeholder="t('common.search')"
-          class="w-full sm:w-80"
+          class="w-full"
           @input="onSearch"
         />
       </IconField>
@@ -101,6 +102,9 @@ function onUpdated() {
       @page="onPage"
       class="w-full"
     >
+      <Column header="#" style="width: 4.5rem">
+        <template #body="{ index }">{{ (store.pagination.page - 1) * store.pagination.perPage + index + 1 }}</template>
+      </Column>
       <template #empty>
         <div class="py-8 text-center text-surface-500">{{ t('common.empty') }}</div>
       </template>
@@ -115,7 +119,7 @@ function onUpdated() {
       </Column>
       <Column field="created_at" :header="t('common.createdAt')">
         <template #body="{ data }">
-          {{ new Date(data.created_at).toLocaleDateString() }}
+          {{ formatDate(data.created_at) }}
         </template>
       </Column>
       <Column :header="t('common.actions')" style="width: 10rem">

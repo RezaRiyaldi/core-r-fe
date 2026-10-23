@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
@@ -13,19 +13,16 @@ const notificationsStore = useNotificationsStore()
 const { t, locale } = useI18n()
 
 const sidebarOpen = ref(true)
-
+const isMobile = ref(false)
 const visibleNav = computed(() =>
   navigation.filter((item) => !item.permission || auth.hasPermission(item.permission)),
 )
-
-const breadcrumbs = computed(() => {
-  const matched = route.matched.filter((r) => r.meta?.breadcrumb)
-  return matched.map((r) => ({ label: r.meta.breadcrumb as string }))
-})
-
-function toggleSidebar() {
-  sidebarOpen.value = !sidebarOpen.value
-}
+const breadcrumbs = computed(() =>
+  route.matched
+    .filter((record) => record.meta?.breadcrumb)
+    .map((record) => ({ label: record.meta.breadcrumb as string })),
+)
+const currentPage = computed(() => breadcrumbs.value.at(-1)?.label ?? t('nav.dashboard'))
 
 function switchLocale() {
   locale.value = locale.value === 'id' ? 'en' : 'id'
@@ -36,117 +33,105 @@ async function handleLogout() {
   router.push({ name: 'login' })
 }
 
+function updateViewport() {
+  isMobile.value = window.matchMedia('(max-width: 900px)').matches
+  sidebarOpen.value = !isMobile.value
+}
+
+function closeMobileNav() {
+  if (isMobile.value) sidebarOpen.value = false
+}
+
 onMounted(() => {
+  updateViewport()
+  window.addEventListener('resize', updateViewport)
   notificationsStore.fetchUnreadCount()
 })
+
+onUnmounted(() => window.removeEventListener('resize', updateViewport))
 </script>
 
 <template>
-  <div class="flex h-screen overflow-hidden bg-surface-50">
-    <!-- Sidebar -->
-    <aside
-      :class="[
-        'flex flex-col bg-surface-900 text-surface-0 transition-all duration-300',
-        sidebarOpen ? 'w-64' : 'w-16',
-      ]"
-    >
-      <!-- Logo -->
-      <div class="flex h-16 items-center gap-3 px-4 border-b border-surface-700">
-        <span class="pi pi-server text-primary-400 text-xl shrink-0" />
-        <span v-if="sidebarOpen" class="font-semibold text-sm truncate">
-          {{ t('app.name') }}
+  <div class="admin-shell flex h-screen overflow-hidden">
+    <aside :class="['admin-sidebar flex shrink-0 flex-col', sidebarOpen ? 'w-64 mobile-nav-open' : 'w-[76px] mobile-nav-closed']">
+      <RouterLink to="/" class="brand-lockup flex h-[84px] items-center gap-3 px-5" @click="closeMobileNav">
+        <span class="brand-mark grid h-10 w-10 shrink-0 place-items-center rounded-xl">
+          <i class="pi pi-bolt text-lg" />
         </span>
-      </div>
+        <span v-if="sidebarOpen" class="min-w-0">
+          <span class="block truncate text-sm font-bold tracking-wide text-white">{{ t('app.name') }}</span>
+          <span class="mt-0.5 block text-[10px] font-semibold uppercase tracking-[0.2em] text-blue-200/60">Control center</span>
+        </span>
+      </RouterLink>
 
-      <!-- Nav -->
-      <nav class="flex-1 overflow-y-auto py-4">
+      <div v-if="sidebarOpen" class="px-5 pb-2 pt-3 text-[10px] font-bold uppercase tracking-[0.18em] text-blue-200/45">
+        Workspace
+      </div>
+      <nav class="sidebar-nav flex-1 overflow-y-auto px-3 py-2">
         <RouterLink
           v-for="item in visibleNav"
           :key="item.key"
           :to="item.to"
-          class="flex items-center gap-3 px-4 py-2.5 text-sm text-surface-300 hover:bg-surface-700 hover:text-surface-0 transition-colors"
-          :class="{ 'bg-surface-700 text-surface-0': route.path === item.to }"
+          @click="closeMobileNav"
           :title="!sidebarOpen ? t(item.labelKey) : undefined"
+          :class="['sidebar-link group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all', { 'sidebar-link-active': route.path === item.to }]"
         >
-          <span :class="[item.icon, 'text-base shrink-0']" />
-          <span v-if="sidebarOpen" class="truncate">{{ t(item.labelKey) }}</span>
+          <span :class="[item.icon, 'grid h-5 w-5 shrink-0 place-items-center text-[15px]']" />
+          <span v-if="sidebarOpen" class="min-w-0 flex-1 truncate">{{ t(item.labelKey) }}</span>
+          <span v-if="sidebarOpen && item.key === 'notifications' && notificationsStore.unreadCount > 0" class="nav-count">
+            {{ notificationsStore.unreadCount > 9 ? '9+' : notificationsStore.unreadCount }}
+          </span>
         </RouterLink>
       </nav>
 
-      <!-- User -->
-      <div class="border-t border-surface-700 p-4">
-        <div v-if="sidebarOpen" class="mb-3 text-xs text-surface-400 truncate">
-          {{ auth.user?.name }}
+      <div class="sidebar-bottom p-3">
+        <div v-if="sidebarOpen" class="account-card mb-3 flex items-center gap-3 rounded-xl p-3">
+          <Avatar :label="auth.user?.name?.charAt(0).toUpperCase()" shape="circle" class="account-avatar shrink-0" />
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-xs font-semibold text-white">{{ auth.user?.name }}</p>
+            <p class="mt-0.5 truncate text-[10px] text-blue-100/55">{{ auth.user?.email }}</p>
+          </div>
         </div>
         <Button
           :icon="sidebarOpen ? 'pi pi-sign-out' : 'pi pi-sign-out'"
           :label="sidebarOpen ? t('auth.logout') : undefined"
-          severity="secondary"
           text
-          size="small"
-          class="w-full"
+          class="sidebar-logout w-full justify-start"
           @click="handleLogout"
         />
       </div>
     </aside>
+    <button v-if="isMobile && sidebarOpen" class="mobile-nav-backdrop" type="button" aria-label="Close navigation" @click="sidebarOpen = false" />
 
-    <!-- Main -->
-    <div class="flex flex-1 flex-col overflow-hidden">
-      <!-- Header -->
-      <header class="flex h-16 items-center gap-4 bg-white px-6 shadow-sm shrink-0">
+    <div class="admin-main flex min-w-0 flex-1 flex-col overflow-hidden">
+      <header class="admin-topbar flex h-[76px] shrink-0 items-center gap-4 px-5 sm:px-8">
         <Button
           icon="pi pi-bars"
           text
-          severity="secondary"
-          @click="toggleSidebar"
+          rounded
+          class="!text-slate-500 hover:!bg-blue-50 hover:!text-blue-700"
+          @click="sidebarOpen = !sidebarOpen"
           aria-label="Toggle sidebar"
         />
-
-        <!-- Breadcrumb -->
-        <Breadcrumb
-          v-if="breadcrumbs.length"
-          :model="breadcrumbs"
-          class="flex-1 border-none p-0 bg-transparent"
-        />
-        <div v-else class="flex-1" />
-
-        <!-- Notifications bell -->
+        <div class="min-w-0 flex-1">
+          <Breadcrumb v-if="breadcrumbs.length" :model="breadcrumbs" class="topbar-breadcrumb border-none bg-transparent p-0" />
+          <span v-else class="text-sm font-semibold text-slate-700">{{ currentPage }}</span>
+        </div>
+        <div class="hidden items-center gap-2 text-xs text-slate-400 md:flex">
+          <span class="h-2 w-2 rounded-full bg-emerald-400 ring-4 ring-emerald-50" />
+          {{ locale === 'id' ? 'Sistem siap' : 'All systems ready' }}
+        </div>
+        <span class="topbar-divider mx-1 hidden h-8 w-px sm:block" />
         <RouterLink :to="{ name: 'notifications' }" class="relative inline-flex">
-          <Button
-            icon="pi pi-bell"
-            text
-            severity="secondary"
-            :aria-label="t('nav.notifications')"
-          />
-          <Badge
-            v-if="notificationsStore.unreadCount > 0"
-            :value="notificationsStore.unreadCount > 99 ? '99+' : String(notificationsStore.unreadCount)"
-            severity="danger"
-            class="absolute -top-1 -right-1 !text-xs !min-w-4 !h-4 !leading-4 pointer-events-none"
-          />
+          <Button icon="pi pi-bell" text rounded class="!text-slate-500 hover:!bg-blue-50 hover:!text-blue-700" :aria-label="t('nav.notifications')" />
+          <Badge v-if="notificationsStore.unreadCount > 0" :value="notificationsStore.unreadCount > 99 ? '99+' : String(notificationsStore.unreadCount)" severity="danger" class="absolute right-0 top-0 !min-w-4 !h-4 !text-[10px] pointer-events-none" />
         </RouterLink>
-
-        <!-- Locale switcher -->
-        <Button
-          :label="locale === 'id' ? 'EN' : 'ID'"
-          text
-          severity="secondary"
-          size="small"
-          @click="switchLocale"
-          :aria-label="locale === 'id' ? 'Switch to English' : 'Ganti ke Bahasa Indonesia'"
-        />
-
-        <!-- User avatar -->
-        <Avatar
-          :label="auth.user?.name?.charAt(0).toUpperCase()"
-          shape="circle"
-          class="bg-primary-100 text-primary-700 cursor-default"
-        />
+        <Button :label="locale === 'id' ? 'EN' : 'ID'" text rounded class="!text-xs !font-bold !text-slate-500 hover:!bg-blue-50 hover:!text-blue-700" @click="switchLocale" :aria-label="locale === 'id' ? 'Switch to English' : 'Ganti ke Bahasa Indonesia'" />
+        <Avatar :label="auth.user?.name?.charAt(0).toUpperCase()" shape="circle" class="topbar-avatar cursor-default" />
       </header>
 
-      <!-- Content -->
-      <main class="flex-1 overflow-y-auto p-6">
-        <RouterView />
+      <main class="admin-content flex-1 overflow-y-auto px-5 py-7 sm:px-8 sm:py-9">
+        <div class="mx-auto w-full max-w-[1440px]"><RouterView /></div>
       </main>
     </div>
   </div>

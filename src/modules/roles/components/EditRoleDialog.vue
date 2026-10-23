@@ -86,7 +86,7 @@ async function submit() {
       <Message v-if="serverError" severity="error" :closable="false">{{ serverError }}</Message>
 
       <div>
-        <label class="mb-1 block text-sm font-medium text-surface-700">{{ t('common.name') }}</label>
+        <label class="mb-1 block text-sm font-medium text-surface-700 required">{{ t('common.name') }}</label>
         <InputText v-model="form.name" class="w-full" :disabled="submitting" required />
         <small v-if="fieldErrors.name" class="text-red-500">{{ fieldErrors.name }}</small>
       </div>

@@ -38,6 +38,9 @@ function onPage(event: DataTablePageEvent) {
       @page="onPage"
       class="w-full"
     >
+      <Column header="#" style="width: 4.5rem">
+        <template #body="{ index }">{{ (store.pagination.page - 1) * store.pagination.perPage + index + 1 }}</template>
+      </Column>
       <template #empty>
         <div class="py-8 text-center text-surface-500">{{ t('common.empty') }}</div>
       </template>

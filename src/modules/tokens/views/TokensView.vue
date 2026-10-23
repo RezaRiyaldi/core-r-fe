@@ -5,6 +5,7 @@ import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
 import { useProfileStore } from '@/modules/profile/store'
 import PageHeader from '@/components/shared/PageHeader.vue'
+import { formatDate } from '@/utils/date'
 import LoadingState from '@/components/shared/LoadingState.vue'
 
 const { t } = useI18n()
@@ -67,6 +68,9 @@ function confirmRevokeAll() {
     <LoadingState v-if="store.loadingTokens" />
 
     <DataTable v-else :value="store.tokens" class="w-full">
+      <Column header="#" style="width: 4.5rem">
+        <template #body="{ index }">{{ index + 1 }}</template>
+      </Column>
       <template #empty>
         <div class="py-8 text-center text-surface-500">{{ t('common.empty') }}</div>
       </template>
@@ -74,12 +78,12 @@ function confirmRevokeAll() {
       <Column field="name" :header="t('common.name')" />
       <Column field="last_used_at" :header="t('tokens.lastUsed')">
         <template #body="{ data }">
-          {{ data.last_used_at ? new Date(data.last_used_at).toLocaleString() : '-' }}
+          {{ data.last_used_at ? formatDate(data.last_used_at, true) : '-' }}
         </template>
       </Column>
       <Column field="expires_at" :header="t('tokens.expiresAt')">
         <template #body="{ data }">
-          {{ data.expires_at ? new Date(data.expires_at).toLocaleString() : '-' }}
+          {{ data.expires_at ? formatDate(data.expires_at, true) : '-' }}
         </template>
       </Column>
       <Column field="is_current" :header="t('tokens.current')">

@@ -1,39 +1,43 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuditStore } from '../store'
 import PageHeader from '@/components/shared/PageHeader.vue'
 import LoadingState from '@/components/shared/LoadingState.vue'
 import ApiErrorMessage from '@/components/shared/ApiErrorMessage.vue'
+import { formatDate } from '@/utils/date'
 
 const { t } = useI18n()
 const store = useAuditStore()
+const route = useRoute()
+const actorId = Number(route.query.actor_id) || undefined
 
 const filterEvent = ref('')
 let filterTimer: ReturnType<typeof setTimeout>
 
-onMounted(() => store.fetchEvents())
+onMounted(() => store.fetchEvents({ 'filter[actor_id][eq]': actorId }))
 
 function onFilterEvent() {
   clearTimeout(filterTimer)
   filterTimer = setTimeout(() => {
     store.pagination.reset()
-    store.fetchEvents({ 'filter[event][eq]': filterEvent.value || undefined })
+    store.fetchEvents({ 'filter[event][eq]': filterEvent.value || undefined, 'filter[actor_id][eq]': actorId })
   }, 400)
 }
 </script>
 
 <template>
   <div>
-    <PageHeader :title="t('audit.title')" :description="t('audit.description')" />
+    <PageHeader :title="t('audit.title')" :description="actorId ? t('audit.filteredActor', { id: actorId }) : t('audit.description')" />
 
-    <div class="mb-4">
-      <IconField>
+    <div class="table-toolbar">
+      <IconField class="table-search">
         <InputIcon class="pi pi-search" />
         <InputText
           v-model="filterEvent"
           :placeholder="t('audit.filterEvent')"
-          class="w-full sm:w-80"
+          class="w-full"
           @input="onFilterEvent"
         />
       </IconField>
@@ -49,6 +53,9 @@ function onFilterEvent() {
       </div>
 
       <DataTable v-else :value="store.events" :loading="store.loading" class="w-full">
+        <Column header="#" style="width: 4.5rem">
+          <template #body="{ index }">{{ index + 1 }}</template>
+        </Column>
         <Column field="event" :header="t('audit.event')" />
         <Column field="actor_id" :header="t('audit.actor')">
           <template #body="{ data }">
@@ -68,7 +75,7 @@ function onFilterEvent() {
         </Column>
         <Column field="created_at" :header="t('common.createdAt')">
           <template #body="{ data }">
-            {{ new Date(data.created_at).toLocaleString() }}
+            {{ formatDate(data.created_at, true) }}
           </template>
         </Column>
       </DataTable>

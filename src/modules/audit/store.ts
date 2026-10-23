@@ -9,8 +9,10 @@ export const useAuditStore = defineStore('audit', () => {
   const loading = ref(false)
   const error = ref<unknown>(null)
   const pagination = useCursorPagination(20)
+  let activeFilters: Partial<ListAuditEventsParams> = {}
 
   async function fetchEvents(params?: Partial<ListAuditEventsParams>) {
+    if (params && !params.cursor) activeFilters = params
     loading.value = true
     error.value = null
     try {
@@ -36,11 +38,11 @@ export const useAuditStore = defineStore('audit', () => {
   }
 
   function loadNext() {
-    if (pagination.nextCursor.value) fetchEvents({ cursor: pagination.nextCursor.value })
+    if (pagination.nextCursor.value) fetchEvents({ ...activeFilters, cursor: pagination.nextCursor.value })
   }
 
   function loadPrev() {
-    if (pagination.prevCursor.value) fetchEvents({ cursor: pagination.prevCursor.value })
+    if (pagination.prevCursor.value) fetchEvents({ ...activeFilters, cursor: pagination.prevCursor.value })
   }
 
   return { events, loading, error, pagination, fetchEvents, loadNext, loadPrev }

@@ -33,16 +33,16 @@ async function submit() {
 </script>
 
 <template>
-  <div class="flex min-h-screen items-center justify-center bg-surface-50">
+  <div class="flex min-h-screen items-center justify-center bg-surface-50 px-4 py-8">
     <div class="w-full max-w-sm">
       <div class="mb-8 text-center">
         <h1 class="text-2xl font-semibold text-surface-900">{{ t('app.name') }}</h1>
       </div>
 
-      <div class="rounded-xl bg-white p-8 shadow">
+      <div class="rounded-xl bg-white p-6 shadow sm:p-8">
         <form @submit.prevent="submit" novalidate>
           <div class="mb-4">
-            <label for="email" class="mb-1 block text-sm font-medium text-surface-700">
+            <label for="email" class="mb-1 block text-sm font-medium text-surface-700 required">
               {{ t('auth.email') }}
             </label>
             <InputText
@@ -57,7 +57,7 @@ async function submit() {
           </div>
 
           <div class="mb-6">
-            <label for="password" class="mb-1 block text-sm font-medium text-surface-700">
+            <label for="password" class="mb-1 block text-sm font-medium text-surface-700 required">
               {{ t('auth.password') }}
             </label>
             <Password

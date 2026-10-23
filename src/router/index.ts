@@ -51,6 +51,12 @@ const router = createRouter({
           meta: { requiresAuth: true, permission: 'users.view', breadcrumb: 'User Detail' },
         },
         {
+          path: 'users/:id/edit',
+          name: 'user-edit',
+          component: () => import('@/modules/users/views/UserEditView.vue'),
+          meta: { requiresAuth: true, permission: 'users.view', breadcrumb: 'Edit User' },
+        },
+        {
           path: 'roles',
           name: 'roles',
           component: () => import('@/modules/roles/views/RolesListView.vue'),

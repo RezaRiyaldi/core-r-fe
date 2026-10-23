@@ -7,6 +7,7 @@ import { useNotificationsStore } from '../store'
 import PageHeader from '@/components/shared/PageHeader.vue'
 import LoadingState from '@/components/shared/LoadingState.vue'
 import ApiErrorMessage from '@/components/shared/ApiErrorMessage.vue'
+import { formatDate } from '@/utils/date'
 import type { NotificationItem } from '@/api/generated/models'
 
 const { t } = useI18n()
@@ -65,17 +66,17 @@ function confirmDelete(item: NotificationItem) {
         <div
           v-for="item in store.notifications"
           :key="item.id"
-          class="flex items-start gap-3 rounded-lg border border-surface-200 p-4"
+          class="notification-card flex items-start gap-3 rounded-lg border border-surface-200 p-4"
           :class="{ 'bg-surface-50': !item.read_at }"
         >
-          <div class="flex-1">
+          <div class="notification-card-content flex-1">
             <div class="flex items-center gap-2">
               <span class="font-medium">{{ item.title }}</span>
               <Tag v-if="!item.read_at" :value="t('notifications.unread')" severity="info" />
             </div>
             <p class="mt-1 text-sm text-surface-600">{{ item.message }}</p>
             <span class="mt-1 block text-xs text-surface-400">
-              {{ new Date(item.created_at).toLocaleString() }}
+              {{ formatDate(item.created_at, true) }}
             </span>
           </div>
           <div class="flex gap-1">

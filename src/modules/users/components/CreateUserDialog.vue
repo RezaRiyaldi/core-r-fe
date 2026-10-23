@@ -79,19 +79,19 @@ async function submit() {
       <Message v-if="serverError" severity="error" :closable="false">{{ serverError }}</Message>
 
       <div>
-        <label class="mb-1 block text-sm font-medium text-surface-700">{{ t('common.name') }}</label>
+        <label class="mb-1 block text-sm font-medium text-surface-700 required">{{ t('common.name') }}</label>
         <InputText v-model="form.name" class="w-full" :disabled="submitting" required />
         <small v-if="fieldErrors.name" class="text-red-500">{{ fieldErrors.name }}</small>
       </div>
 
       <div>
-        <label class="mb-1 block text-sm font-medium text-surface-700">{{ t('common.email') }}</label>
+        <label class="mb-1 block text-sm font-medium text-surface-700 required">{{ t('common.email') }}</label>
         <InputText v-model="form.email" type="email" class="w-full" :disabled="submitting" required />
         <small v-if="fieldErrors.email" class="text-red-500">{{ fieldErrors.email }}</small>
       </div>
 
       <div>
-        <label class="mb-1 block text-sm font-medium text-surface-700">{{ t('users.password') }}</label>
+        <label class="mb-1 block text-sm font-medium text-surface-700 required">{{ t('users.password') }}</label>
         <Password
           v-model="form.password"
           :feedback="false"
@@ -105,7 +105,7 @@ async function submit() {
       </div>
 
       <div>
-        <label class="mb-1 block text-sm font-medium text-surface-700">{{ t('users.passwordConfirmation') }}</label>
+        <label class="mb-1 block text-sm font-medium text-surface-700 required">{{ t('users.passwordConfirmation') }}</label>
         <Password
           v-model="form.password_confirmation"
           :feedback="false"

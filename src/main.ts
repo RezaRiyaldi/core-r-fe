@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import PrimeVue from 'primevue/config'
 import Aura from '@primevue/themes/aura'
+import { definePreset } from '@primevue/themes'
 import ToastService from 'primevue/toastservice'
 import ConfirmationService from 'primevue/confirmationservice'
 import 'primeicons/primeicons.css'
@@ -33,6 +34,8 @@ import Card from 'primevue/card'
 import Divider from 'primevue/divider'
 import ProgressSpinner from 'primevue/progressspinner'
 import Chip from 'primevue/chip'
+import IconField from 'primevue/iconfield'
+import InputIcon from 'primevue/inputicon'
 
 import App from './App.vue'
 import router from './router'
@@ -40,12 +43,30 @@ import { i18n } from './i18n'
 
 const app = createApp(App)
 
+const BlueAura = definePreset(Aura, {
+  semantic: {
+    primary: {
+      50: '{blue.50}',
+      100: '{blue.100}',
+      200: '{blue.200}',
+      300: '{blue.300}',
+      400: '{blue.400}',
+      500: '{blue.500}',
+      600: '{blue.600}',
+      700: '{blue.700}',
+      800: '{blue.800}',
+      900: '{blue.900}',
+      950: '{blue.950}',
+    },
+  },
+})
+
 app.use(createPinia())
 app.use(router)
 app.use(i18n)
 app.use(PrimeVue, {
   theme: {
-    preset: Aura,
+    preset: BlueAura,
     options: {
       darkModeSelector: '.dark',
     },
@@ -80,6 +101,8 @@ app.component('Card', Card)
 app.component('Divider', Divider)
 app.component('ProgressSpinner', ProgressSpinner)
 app.component('Chip', Chip)
+app.component('IconField', IconField)
+app.component('InputIcon', InputIcon)
 
 app.mount('#app')
 
