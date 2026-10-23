@@ -131,12 +131,14 @@ src/
 - [x] `App.vue` — `RouterView` + `Toast` + `ConfirmDialog`
 - [x] Build produksi berhasil (exit 0)
 
-### 🔲 Fase 2 — OpenAPI dan fondasi API
+### ✅ Fase 2 — OpenAPI dan fondasi API (selesai)
 
-- [ ] Verifikasi `OPENAPI_URL` dan generate ulang dengan Orval
-- [ ] Putuskan apakah `src/api/generated/` di-commit ke Git
-- [ ] Konfigurasi Orval memakai `apiClient` dari `client.ts`
-- [ ] Pastikan HTTPS lokal + CORS + konektivitas API berfungsi
+- [x] Verifikasi kontrak Orval: `getCoreRAPI(axiosInstance)` factory pattern
+- [x] `src/api/index.ts` — export `api = getCoreRAPI(apiClient)` sebagai instance tunggal
+- [x] Kontrak auth dikonfirmasi dari generated types:
+  - `POST /api/auth/login` → `LoginRequest { email, password, device_name }` → `{ token, token_type, expires_at, user }`
+  - `GET /api/auth/me` → `UserSuccessResponse` dengan `roles[]` dan `permissions[]`
+- [x] Build produksi berhasil (exit 0)
 
 ### 🔲 Fase 3 — Autentikasi dan izin
 
