@@ -1,3 +1,6 @@
+# Environment — never commit local secrets
+.env
+
 # Logs
 logs
 *.log
