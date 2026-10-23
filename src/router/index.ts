@@ -115,6 +115,8 @@ router.beforeEach(async (to) => {
   }
 
   if (to.meta.requiresAuth && !auth.isAuthenticated) {
+    // Sudah di login — jangan redirect lagi
+    if (to.name === 'login') return
     return { name: 'login', query: { redirect: to.fullPath } }
   }
 
