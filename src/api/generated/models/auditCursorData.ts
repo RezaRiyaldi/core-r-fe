@@ -5,18 +5,18 @@
  * Standard API contract for Core R.
  * OpenAPI spec version: 1.0.0
  */
-import type { UserProfile } from './userProfile';
+import type { AuditEventItem } from './auditEventItem';
 
-export type UsersCursorResponseData = {
-  data: UserProfile[];
+export interface AuditCursorData {
+  data: AuditEventItem[];
   path: string;
   per_page: number;
   /** @nullable */
-  next_cursor?: string | null;
+  next_cursor: string | null;
   /** @nullable */
-  next_page_url?: string | null;
+  next_page_url: string | null;
   /** @nullable */
-  prev_cursor?: string | null;
+  prev_cursor: string | null;
   /** @nullable */
-  prev_page_url?: string | null;
-};
+  prev_page_url: string | null;
+}

@@ -7,6 +7,6 @@
  */
 
 /**
- * Cursor paginator containing audit event records.
+ * @nullable
  */
-export type AuditCursorResponseData = { [key: string]: unknown };
+export type NotificationItemAction = {[key: string]: unknown} | null;

@@ -5,5 +5,16 @@
  * Standard API contract for Core R.
  * OpenAPI spec version: 1.0.0
  */
+import type { OffsetPaginationMeta } from './offsetPaginationMeta';
+import type { RoleItem } from './roleItem';
 
-export interface RoleListResponse { [key: string]: unknown }
+export type RoleListResponse = {
+  success: boolean;
+  data: RoleItem[];
+} | {
+  success: true;
+  data: {
+  data: RoleItem[];
+  meta: OffsetPaginationMeta;
+};
+};

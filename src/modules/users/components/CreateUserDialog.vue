@@ -55,7 +55,7 @@ async function submit() {
     if (axiosErr.response?.status === 422 && axiosErr.response.data?.errors) {
       const errs = axiosErr.response.data.errors
       Object.entries(errs).forEach(([field, msgs]) => {
-        fieldErrors[field] = msgs[0]
+        fieldErrors[field] = msgs[0] ?? ''
       })
     } else {
       serverError.value = axiosErr.response?.data?.message ?? t('common.error')

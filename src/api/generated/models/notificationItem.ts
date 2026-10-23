@@ -5,5 +5,19 @@
  * Standard API contract for Core R.
  * OpenAPI spec version: 1.0.0
  */
+import type { NotificationItemAction } from './notificationItemAction';
+import type { NotificationItemCategory } from './notificationItemCategory';
+import type { NotificationItemContext } from './notificationItemContext';
 
-export interface NotificationItem { [key: string]: unknown }
+export interface NotificationItem {
+  id: string;
+  category: NotificationItemCategory;
+  title: string;
+  message: string;
+  /** @nullable */
+  action: NotificationItemAction;
+  context: NotificationItemContext;
+  /** @nullable */
+  read_at: string | null;
+  created_at: string;
+}

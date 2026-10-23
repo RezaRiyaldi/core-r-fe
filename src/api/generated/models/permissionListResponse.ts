@@ -5,5 +5,16 @@
  * Standard API contract for Core R.
  * OpenAPI spec version: 1.0.0
  */
+import type { OffsetPaginationMeta } from './offsetPaginationMeta';
+import type { PermissionItem } from './permissionItem';
 
-export interface PermissionListResponse { [key: string]: unknown }
+export type PermissionListResponse = {
+  success: boolean;
+  data: PermissionItem[];
+} | {
+  success: true;
+  data: {
+  data: PermissionItem[];
+  meta: OffsetPaginationMeta;
+};
+};

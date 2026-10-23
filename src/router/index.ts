@@ -47,13 +47,13 @@ const router = createRouter({
         {
           path: 'roles',
           name: 'roles',
-          component: () => import('@/modules/dashboard/views/DashboardView.vue'),
+          component: () => import('@/modules/roles/views/RolesListView.vue'),
           meta: { requiresAuth: true, permission: 'roles.view', breadcrumb: 'Roles' },
         },
         {
           path: 'permissions',
           name: 'permissions',
-          component: () => import('@/modules/dashboard/views/DashboardView.vue'),
+          component: () => import('@/modules/permissions/views/PermissionsListView.vue'),
           meta: { requiresAuth: true, permission: 'permissions.view', breadcrumb: 'Permissions' },
         },
         {
@@ -65,13 +65,13 @@ const router = createRouter({
         {
           path: 'notifications',
           name: 'notifications',
-          component: () => import('@/modules/dashboard/views/DashboardView.vue'),
-          meta: { requiresAuth: true, permission: 'notifications.view', breadcrumb: 'Notifications' },
+          component: () => import('@/modules/notifications/views/NotificationsListView.vue'),
+          meta: { requiresAuth: true, breadcrumb: 'Notifications' },
         },
         {
           path: 'audit',
           name: 'audit',
-          component: () => import('@/modules/dashboard/views/DashboardView.vue'),
+          component: () => import('@/modules/audit/views/AuditListView.vue'),
           meta: { requiresAuth: true, permission: 'audit.view', breadcrumb: 'Audit' },
         },
       ],

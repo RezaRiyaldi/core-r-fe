@@ -5,10 +5,9 @@
  * Standard API contract for Core R.
  * OpenAPI spec version: 1.0.0
  */
-import type { AuditCursorResponseData } from './auditCursorResponseData';
+import type { AuditCursorData } from './auditCursorData';
 
 export interface AuditCursorResponse {
   success: boolean;
-  /** Cursor paginator containing audit event records. */
-  data: AuditCursorResponseData;
+  data: AuditCursorData;
 }

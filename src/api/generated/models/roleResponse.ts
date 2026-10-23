@@ -5,5 +5,9 @@
  * Standard API contract for Core R.
  * OpenAPI spec version: 1.0.0
  */
+import type { RoleItem } from './roleItem';
 
-export interface RoleResponse { [key: string]: unknown }
+export interface RoleResponse {
+  success: boolean;
+  data: RoleItem;
+}

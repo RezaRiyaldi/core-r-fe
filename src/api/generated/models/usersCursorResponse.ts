@@ -5,9 +5,28 @@
  * Standard API contract for Core R.
  * OpenAPI spec version: 1.0.0
  */
-import type { UsersCursorResponseData } from './usersCursorResponseData';
+import type { OffsetPaginationMeta } from './offsetPaginationMeta';
+import type { UserListItem } from './userListItem';
 
-export interface UsersCursorResponse {
+export type UsersCursorResponse = {
   success: boolean;
-  data: UsersCursorResponseData;
-}
+  data: {
+  data: UserListItem[];
+  path: string;
+  per_page: number;
+  /** @nullable */
+  next_cursor?: string | null;
+  /** @nullable */
+  next_page_url?: string | null;
+  /** @nullable */
+  prev_cursor?: string | null;
+  /** @nullable */
+  prev_page_url?: string | null;
+};
+} | {
+  success: true;
+  data: {
+  data: UserListItem[];
+  meta: OffsetPaginationMeta;
+};
+};

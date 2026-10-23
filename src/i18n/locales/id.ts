@@ -36,6 +36,7 @@ export default {
     name: 'Nama',
     email: 'Email',
     roles: 'Peran',
+    permissions: 'Izin',
     createdAt: 'Dibuat',
   },
   error: {
@@ -59,4 +60,40 @@ export default {
     statusUpdated: 'Status berhasil diperbarui.',
     rolesUpdated: 'Peran berhasil diperbarui.',
   },
+  roles: {
+    title: 'Peran',
+    description: 'Kelola peran dan izinnya.',
+    addRole: 'Tambah peran',
+    createTitle: 'Buat peran',
+    editTitle: 'Ubah peran',
+    selectPermissions: 'Pilih izin',
+    permissionsCount: 'izin',
+    confirmDelete: 'Hapus peran "{name}"?',
+    createdSuccess: 'Peran berhasil dibuat.',
+    updatedSuccess: 'Peran berhasil diperbarui.',
+    deletedSuccess: 'Peran berhasil dihapus.',
+  },
+  permissions: {
+    title: 'Izin',
+    description: 'Lihat semua izin yang tersedia.',
+  },
+  notifications: {
+    title: 'Notifikasi',
+    description: 'Notifikasi Anda.',
+    markAllRead: 'Tandai semua dibaca',
+    markRead: 'Tandai dibaca',
+    unread: 'Belum dibaca',
+    confirmDelete: 'Hapus notifikasi ini?',
+    deletedSuccess: 'Notifikasi berhasil dihapus.',
+  },
+  audit: {
+    title: 'Log Audit',
+    description: 'Log aktivitas sistem.',
+    event: 'Event',
+    actor: 'Aktor',
+    subject: 'Subjek',
+    ip: 'Alamat IP',
+    filterEvent: 'Filter berdasarkan event',
+  },
 }
+

@@ -5,5 +5,9 @@
  * Standard API contract for Core R.
  * OpenAPI spec version: 1.0.0
  */
+import type { NotificationItem } from './notificationItem';
 
-export interface NotificationResponse { [key: string]: unknown }
+export interface NotificationResponse {
+  success: boolean;
+  data: NotificationItem;
+}

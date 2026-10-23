@@ -36,6 +36,7 @@ export default {
     name: 'Name',
     email: 'Email',
     roles: 'Roles',
+    permissions: 'Permissions',
     createdAt: 'Created',
   },
   error: {
@@ -59,4 +60,40 @@ export default {
     statusUpdated: 'Status updated.',
     rolesUpdated: 'Roles updated.',
   },
+  roles: {
+    title: 'Roles',
+    description: 'Manage roles and their permissions.',
+    addRole: 'Add role',
+    createTitle: 'Create role',
+    editTitle: 'Edit role',
+    selectPermissions: 'Select permissions',
+    permissionsCount: 'permissions',
+    confirmDelete: 'Delete role "{name}"?',
+    createdSuccess: 'Role created.',
+    updatedSuccess: 'Role updated.',
+    deletedSuccess: 'Role deleted.',
+  },
+  permissions: {
+    title: 'Permissions',
+    description: 'View all available permissions.',
+  },
+  notifications: {
+    title: 'Notifications',
+    description: 'Your notifications.',
+    markAllRead: 'Mark all as read',
+    markRead: 'Mark as read',
+    unread: 'Unread',
+    confirmDelete: 'Delete this notification?',
+    deletedSuccess: 'Notification deleted.',
+  },
+  audit: {
+    title: 'Audit Log',
+    description: 'System activity log.',
+    event: 'Event',
+    actor: 'Actor',
+    subject: 'Subject',
+    ip: 'IP Address',
+    filterEvent: 'Filter by event',
+  },
 }
+

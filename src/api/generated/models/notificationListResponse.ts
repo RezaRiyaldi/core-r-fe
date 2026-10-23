@@ -5,5 +5,9 @@
  * Standard API contract for Core R.
  * OpenAPI spec version: 1.0.0
  */
+import type { NotificationCursorData } from './notificationCursorData';
 
-export interface NotificationListResponse { [key: string]: unknown }
+export interface NotificationListResponse {
+  success: boolean;
+  data: NotificationCursorData;
+}

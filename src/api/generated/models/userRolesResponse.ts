@@ -5,5 +5,9 @@
  * Standard API contract for Core R.
  * OpenAPI spec version: 1.0.0
  */
+import type { UserRolesData } from './userRolesData';
 
-export interface UserRolesResponse { [key: string]: unknown }
+export interface UserRolesResponse {
+  success: boolean;
+  data: UserRolesData;
+}

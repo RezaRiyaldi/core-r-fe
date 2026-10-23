@@ -45,7 +45,6 @@ import type {
   NotificationListResponse,
   NotificationPreferencesResponse,
   NotificationResponse,
-  OffsetListResponse,
   PaymentResponse,
   PermissionListResponse,
   PollEvents200,
@@ -1024,7 +1023,7 @@ const getResetPasswordUrl = () => {
  */
 const listPermissions = (
     params?: ListPermissionsParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<PermissionListResponse | OffsetListResponse>> => {
+ ): Promise<AxiosResponse<PermissionListResponse>> => {
     return axiosInstance.get(
       `/api/permissions`,{
     ...options,
@@ -1049,7 +1048,7 @@ const getListPermissionsUrl = (params?: ListPermissionsParams,) => {
  */
 const listRoles = (
     params?: ListRolesParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<RoleListResponse | OffsetListResponse>> => {
+ ): Promise<AxiosResponse<RoleListResponse>> => {
     return axiosInstance.get(
       `/api/roles`,{
     ...options,
@@ -1146,7 +1145,7 @@ const getUpdateRoleUrl = (role: number,) => {
  */
 const listUsers = (
     params?: ListUsersParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<UsersCursorResponse | OffsetListResponse>> => {
+ ): Promise<AxiosResponse<UsersCursorResponse>> => {
     return axiosInstance.get(
       `/api/users`,{
     ...options,
@@ -1544,12 +1543,12 @@ export type ResendVerificationResult = AxiosResponse<MessageSuccessResponse>
 export type VerifyEmailResult = AxiosResponse<MessageSuccessResponse>
 export type ForgotPasswordResult = AxiosResponse<MessageSuccessResponse>
 export type ResetPasswordResult = AxiosResponse<MessageSuccessResponse>
-export type ListPermissionsResult = AxiosResponse<PermissionListResponse | OffsetListResponse>
-export type ListRolesResult = AxiosResponse<RoleListResponse | OffsetListResponse>
+export type ListPermissionsResult = AxiosResponse<PermissionListResponse>
+export type ListRolesResult = AxiosResponse<RoleListResponse>
 export type CreateRoleResult = AxiosResponse<RoleResponse>
 export type DeleteRoleResult = AxiosResponse<MessageSuccessResponse>
 export type UpdateRoleResult = AxiosResponse<RoleResponse>
-export type ListUsersResult = AxiosResponse<UsersCursorResponse | OffsetListResponse>
+export type ListUsersResult = AxiosResponse<UsersCursorResponse>
 export type CreateUserResult = AxiosResponse<UserSuccessResponse>
 export type ShowUserResult = AxiosResponse<UserDetailResponse>
 export type UpdateUserStatusResult = AxiosResponse<UserStatusResponse>

@@ -6,4 +6,6 @@
  * OpenAPI spec version: 1.0.0
  */
 
-export type OffsetListResponseDataDataItem = { [key: string]: unknown };
+export interface UserRolesData {
+  roles: string[];
+}

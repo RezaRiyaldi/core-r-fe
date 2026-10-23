@@ -5,5 +5,9 @@
  * Standard API contract for Core R.
  * OpenAPI spec version: 1.0.0
  */
+import type { PublicSettingValues } from './publicSettingValues';
 
-export interface PublicSettingsResponse { [key: string]: unknown }
+export interface PublicSettingsResponse {
+  success: boolean;
+  data: PublicSettingValues;
+}

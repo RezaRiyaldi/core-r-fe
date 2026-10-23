@@ -1,31 +1,29 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { api } from '@/api'
-import type { UserProfile, ListUsersParams, AdminCreateUserRequest } from '@/api/generated/models'
+import { useOffsetPagination } from '@/composables/useOffsetPagination'
+import type { UserListItem, AdminCreateUserRequest, ListUsersParams, OffsetPaginationMeta } from '@/api/generated/models'
 
 export const useUsersStore = defineStore('users', () => {
-  const users = ref<UserProfile[]>([])
+  const users = ref<UserListItem[]>([])
   const loading = ref(false)
   const error = ref<unknown>(null)
-  const nextCursor = ref<string | null>(null)
-  const prevCursor = ref<string | null>(null)
+  const pagination = useOffsetPagination(20)
 
-  async function fetchUsers(params?: ListUsersParams) {
+  async function fetchUsers(params?: Partial<ListUsersParams>) {
     loading.value = true
     error.value = null
     try {
-      const res = await api.listUsers({ per_page: 20, ...params })
-      // API returns UsersCursorResponse | OffsetListResponse — cast ke cursor shape
+      const res = await api.listUsers({
+        ...pagination.queryParams.value,
+        ...params,
+      })
       const body = res.data as {
-        data: {
-          data: UserProfile[]
-          next_cursor?: string | null
-          prev_cursor?: string | null
-        }
+        success: boolean
+        data: { data: UserListItem[]; meta: OffsetPaginationMeta }
       }
       users.value = body.data.data
-      nextCursor.value = body.data.next_cursor ?? null
-      prevCursor.value = body.data.prev_cursor ?? null
+      pagination.syncMeta(body.data.meta)
     } catch (err) {
       error.value = err
     } finally {
@@ -40,23 +38,21 @@ export const useUsersStore = defineStore('users', () => {
 
   async function updateUserStatus(userId: number, status: 'active' | 'suspended') {
     await api.updateUserStatus(userId, { status })
-    // Update lokal — hindari refetch penuh
     const user = users.value.find((u) => u.id === userId)
-    if (user) user.status = status
+    if (user) user.status = status as UserListItem['status']
   }
 
   async function syncUserRoles(userId: number, roles: string[]) {
     await api.syncUserRoles(userId, { roles })
-    const user = users.value.find((u) => u.id === userId)
-    if (user) user.roles = roles
+    // roles sekarang UserRoleAssignment[] — refetch untuk dapat data terbaru
+    await fetchUsers()
   }
 
   return {
     users,
     loading,
     error,
-    nextCursor,
-    prevCursor,
+    pagination,
     fetchUsers,
     createUser,
     updateUserStatus,
