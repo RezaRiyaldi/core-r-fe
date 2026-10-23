@@ -7,11 +7,8 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <div class="p-8">
-    <h1 class="mb-4 text-2xl font-semibold">{{ t('app.name') }}</h1>
-    <p class="mb-4 text-surface-600">
-      {{ t('common.welcome', { name: auth.user?.name }) }}
-    </p>
-    <Button :label="t('auth.logout')" severity="secondary" @click="auth.logout()" />
+  <div>
+    <h1 class="mb-2 text-2xl font-semibold text-surface-900">{{ t('nav.dashboard') }}</h1>
+    <p class="text-surface-500">{{ t('common.welcome', { name: auth.user?.name }) }}</p>
   </div>
 </template>

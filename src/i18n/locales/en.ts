@@ -10,6 +10,15 @@ export default {
     loginButton: 'Sign in',
     invalidCredentials: 'Invalid email or password.',
   },
+  nav: {
+    dashboard: 'Dashboard',
+    users: 'Users',
+    roles: 'Roles',
+    permissions: 'Permissions',
+    settings: 'Settings',
+    notifications: 'Notifications',
+    audit: 'Audit',
+  },
   common: {
     save: 'Save',
     cancel: 'Cancel',

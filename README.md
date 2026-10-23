@@ -151,12 +151,16 @@ src/
 - [x] i18n: tambah `invalidCredentials`, `welcome`
 - [x] Build produksi berhasil (exit 0)
 
-### 🔲 Fase 4 — Kerangka aplikasi
+### ✅ Fase 4 — Kerangka aplikasi (selesai)
 
-- [ ] Layout autentikasi dan dashboard
-- [ ] Sidebar, header, breadcrumb, responsif
-- [ ] Navigasi berbasis izin
-- [ ] Pengalih bahasa
+- [x] `src/config/navigation.ts` — daftar nav dengan izin per item
+- [x] `src/layouts/AuthLayout.vue` — wrapper centered untuk halaman auth
+- [x] `src/layouts/DashboardLayout.vue` — sidebar collapsible, header, breadcrumb, locale switcher, avatar
+- [x] Sidebar disaring berdasarkan `hasPermission` — item tersembunyi jika izin tidak dimiliki
+- [x] Pengalih bahasa `id` ↔ `en` di header
+- [x] Router direfactor ke nested routes dengan layout sebagai parent
+- [x] i18n: tambah namespace `nav.*`
+- [x] Build produksi berhasil, layouts ter-chunk terpisah (exit 0)
 
 ### 🔲 Fase 5 — UI reusable dan CRUD pertama
 

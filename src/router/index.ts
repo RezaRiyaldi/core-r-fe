@@ -6,23 +6,75 @@ declare module 'vue-router' {
     requiresAuth?: boolean
     requiresGuest?: boolean
     permission?: string
+    breadcrumb?: string
   }
 }
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    // Auth routes — pakai AuthLayout
     {
       path: '/login',
-      name: 'login',
-      component: () => import('@/modules/auth/views/LoginView.vue'),
-      meta: { requiresGuest: true },
+      component: () => import('@/layouts/AuthLayout.vue'),
+      children: [
+        {
+          path: '',
+          name: 'login',
+          component: () => import('@/modules/auth/views/LoginView.vue'),
+          meta: { requiresGuest: true },
+        },
+      ],
     },
+    // Dashboard routes — pakai DashboardLayout
     {
       path: '/',
-      name: 'dashboard',
-      component: () => import('@/modules/dashboard/views/DashboardView.vue'),
+      component: () => import('@/layouts/DashboardLayout.vue'),
       meta: { requiresAuth: true },
+      children: [
+        {
+          path: '',
+          name: 'dashboard',
+          component: () => import('@/modules/dashboard/views/DashboardView.vue'),
+          meta: { requiresAuth: true, breadcrumb: 'Dashboard' },
+        },
+        {
+          path: 'users',
+          name: 'users',
+          component: () => import('@/modules/dashboard/views/DashboardView.vue'),
+          meta: { requiresAuth: true, permission: 'users.view', breadcrumb: 'Users' },
+        },
+        {
+          path: 'roles',
+          name: 'roles',
+          component: () => import('@/modules/dashboard/views/DashboardView.vue'),
+          meta: { requiresAuth: true, permission: 'roles.view', breadcrumb: 'Roles' },
+        },
+        {
+          path: 'permissions',
+          name: 'permissions',
+          component: () => import('@/modules/dashboard/views/DashboardView.vue'),
+          meta: { requiresAuth: true, permission: 'permissions.view', breadcrumb: 'Permissions' },
+        },
+        {
+          path: 'settings',
+          name: 'settings',
+          component: () => import('@/modules/dashboard/views/DashboardView.vue'),
+          meta: { requiresAuth: true, permission: 'settings.view', breadcrumb: 'Settings' },
+        },
+        {
+          path: 'notifications',
+          name: 'notifications',
+          component: () => import('@/modules/dashboard/views/DashboardView.vue'),
+          meta: { requiresAuth: true, permission: 'notifications.view', breadcrumb: 'Notifications' },
+        },
+        {
+          path: 'audit',
+          name: 'audit',
+          component: () => import('@/modules/dashboard/views/DashboardView.vue'),
+          meta: { requiresAuth: true, permission: 'audit.view', breadcrumb: 'Audit' },
+        },
+      ],
     },
     {
       path: '/:pathMatch(.*)*',

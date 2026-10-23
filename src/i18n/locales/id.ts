@@ -10,6 +10,15 @@ export default {
     loginButton: 'Masuk',
     invalidCredentials: 'Email atau kata sandi salah.',
   },
+  nav: {
+    dashboard: 'Dasbor',
+    users: 'Pengguna',
+    roles: 'Peran',
+    permissions: 'Izin',
+    settings: 'Pengaturan',
+    notifications: 'Notifikasi',
+    audit: 'Audit',
+  },
   common: {
     save: 'Simpan',
     cancel: 'Batal',
