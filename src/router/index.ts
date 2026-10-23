@@ -41,7 +41,7 @@ const router = createRouter({
         {
           path: 'users',
           name: 'users',
-          component: () => import('@/modules/dashboard/views/DashboardView.vue'),
+          component: () => import('@/modules/users/views/UsersListView.vue'),
           meta: { requiresAuth: true, permission: 'users.view', breadcrumb: 'Users' },
         },
         {

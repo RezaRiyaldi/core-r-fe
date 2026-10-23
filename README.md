@@ -162,11 +162,17 @@ src/
 - [x] i18n: tambah namespace `nav.*`
 - [x] Build produksi berhasil, layouts ter-chunk terpisah (exit 0)
 
-### 🔲 Fase 5 — UI reusable dan CRUD pertama
+### ✅ Fase 5 — UI reusable dan CRUD pertama (selesai)
 
-- [ ] Pola tabel, pagination, validasi formulir
-- [ ] Dialog konfirmasi, toast, loading/empty/error state
-- [ ] Satu modul CRUD penuh dari awal sampai akhir
+- [x] `src/components/shared/PageHeader.vue` — judul halaman + slot actions
+- [x] `src/components/shared/LoadingState.vue` — spinner + teks loading
+- [x] `src/components/shared/EmptyState.vue` — ikon + teks kosong
+- [x] `src/components/shared/ApiErrorMessage.vue` — normalisasi pesan error API (403, 404, server)
+- [x] `src/modules/users/store.ts` — Pinia store: `fetchUsers`, `createUser`, `updateUserStatus`, `syncUserRoles`
+- [x] `src/modules/users/views/UsersListView.vue` — tabel dengan search debounce, cursor pagination, toggle status dengan konfirmasi
+- [x] `src/modules/users/components/CreateUserDialog.vue` — form create user, error 422 per-field, error server
+- [x] i18n: namespace `users.*`, `error.*`, keys `common.actions/status/name/roles/createdAt`
+- [x] Build produksi berhasil, semua chunk terpisah (exit 0)
 
 ### 🔲 Fase 6 — Modul administrasi
 
