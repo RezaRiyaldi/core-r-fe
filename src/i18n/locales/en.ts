@@ -18,6 +18,8 @@ export default {
     settings: 'Settings',
     notifications: 'Notifications',
     audit: 'Audit',
+    profile: 'Profile',
+    tokens: 'Tokens',
   },
   common: {
     save: 'Save',
@@ -106,6 +108,27 @@ export default {
     title: 'Settings',
     description: 'Manage application settings.',
     savedSuccess: 'Settings saved.',
+  },
+  profile: {
+    title: 'Profile',
+    editProfile: 'Edit Profile',
+    changePassword: 'Change Password',
+    currentPassword: 'Current password',
+    savedSuccess: 'Profile saved.',
+    passwordChanged: 'Password changed.',
+  },
+  tokens: {
+    title: 'Access Tokens',
+    description: 'Manage your active API tokens.',
+    lastUsed: 'Last used',
+    expiresAt: 'Expires',
+    current: 'Current',
+    revoke: 'Revoke',
+    revokeAll: 'Revoke all',
+    confirmRevoke: 'Revoke token "{name}"?',
+    confirmRevokeAll: 'Revoke all tokens? You will be logged out everywhere.',
+    revokedSuccess: 'Token revoked.',
+    revokedAllSuccess: 'All tokens revoked.',
   },
 }
 

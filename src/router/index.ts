@@ -75,6 +75,18 @@ const router = createRouter({
           meta: { requiresAuth: true, breadcrumb: 'Notifications' },
         },
         {
+          path: 'profile',
+          name: 'profile',
+          component: () => import('@/modules/profile/views/ProfileView.vue'),
+          meta: { requiresAuth: true, breadcrumb: 'Profile' },
+        },
+        {
+          path: 'tokens',
+          name: 'tokens',
+          component: () => import('@/modules/tokens/views/TokensView.vue'),
+          meta: { requiresAuth: true, breadcrumb: 'Tokens' },
+        },
+        {
           path: 'audit',
           name: 'audit',
           component: () => import('@/modules/audit/views/AuditListView.vue'),

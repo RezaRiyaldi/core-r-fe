@@ -174,16 +174,34 @@ src/
 - [x] i18n: namespace `users.*`, `error.*`, keys `common.actions/status/name/roles/createdAt`
 - [x] Build produksi berhasil, semua chunk terpisah (exit 0)
 
-### 🔲 Fase 6 — Modul administrasi
+### ✅ Fase 6 — Modul administrasi (selesai)
 
-Users, Roles, Permissions, Settings, Notifications, Audit
+- [x] `useOffsetPagination` + `useCursorPagination` composables
+- [x] **Roles** — list (DataTable + offset pagination), create, edit (dengan permissions MultiSelect), delete
+- [x] **Permissions** — list read-only
+- [x] **Notifications** — list (cursor pagination), mark read, mark all read, delete
+- [x] **Audit** — list (cursor pagination), filter by event
+- [x] **Settings** — metadata-driven form (ToggleSwitch / InputNumber / InputText per tipe), save via PATCH
+- [x] **User detail** — info card, roles edit (syncUserRoles), permissions read-only
+- [x] Notifications badge di header (unreadCount, live update)
+- [x] Link "Edit" di UsersListView → `/users/:id`
+- [x] i18n: namespace `roles.*`, `permissions.*`, `notifications.*`, `audit.*`, `settings.*`, `users.detailTitle/info/noRoles/noPermissions/activeTokens/lastLogin`
+- [x] Build produksi berhasil (exit 0)
 
-### 🔲 Fase 7 — Kualitas dan kesiapan rilis
+### ✅ Fase 7 — Profile, Token management, dan kualitas rilis (selesai)
 
-- [ ] Unit test store, helper, validasi, komponen
-- [ ] Playwright: login, rute terlindungi, CRUD
-- [ ] Build + type-check + lint bersih
-- [ ] Dokumentasi lengkap
+- [x] **Profile** — `ProfileView.vue`: edit nama, ganti password (error 422 per-field)
+- [x] **Token management** — `TokensView.vue`: list tokens, revoke per-token, revoke all
+- [x] `src/modules/profile/store.ts` — `updateProfile`, `changePassword`, `fetchTokens`, `revokeToken`, `revokeAll`
+- [x] Route `/profile` dan `/tokens` terdaftar, nav sidebar diperbarui
+- [x] **Unit test (Vitest)** — 16 tests pass:
+  - `useOffsetPagination` (5 tests)
+  - `useCursorPagination` (5 tests)
+  - `useAuthStore` (5 tests)
+  - `App` mount (1 test)
+- [x] **E2E (Playwright)** — `e2e/auth.spec.ts`: redirect unauthenticated, login form visible, error on invalid credentials
+- [x] i18n: namespace `profile.*`, `tokens.*`, `nav.profile`, `nav.tokens`
+- [x] Build produksi berhasil, typecheck bersih (exit 0)
 
 ## Menambah modul baru
 

@@ -18,6 +18,8 @@ export default {
     settings: 'Pengaturan',
     notifications: 'Notifikasi',
     audit: 'Audit',
+    profile: 'Profil',
+    tokens: 'Token',
   },
   common: {
     save: 'Simpan',
@@ -106,6 +108,27 @@ export default {
     title: 'Pengaturan',
     description: 'Kelola pengaturan aplikasi.',
     savedSuccess: 'Pengaturan berhasil disimpan.',
+  },
+  profile: {
+    title: 'Profil',
+    editProfile: 'Edit Profil',
+    changePassword: 'Ganti Kata Sandi',
+    currentPassword: 'Kata sandi saat ini',
+    savedSuccess: 'Profil berhasil disimpan.',
+    passwordChanged: 'Kata sandi berhasil diubah.',
+  },
+  tokens: {
+    title: 'Token Akses',
+    description: 'Kelola token API aktif Anda.',
+    lastUsed: 'Terakhir digunakan',
+    expiresAt: 'Kedaluwarsa',
+    current: 'Saat ini',
+    revoke: 'Cabut',
+    revokeAll: 'Cabut semua',
+    confirmRevoke: 'Cabut token "{name}"?',
+    confirmRevokeAll: 'Cabut semua token? Anda akan keluar dari semua perangkat.',
+    revokedSuccess: 'Token berhasil dicabut.',
+    revokedAllSuccess: 'Semua token berhasil dicabut.',
   },
 }
 

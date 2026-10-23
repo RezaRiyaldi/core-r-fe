@@ -56,4 +56,16 @@ export const navigation: NavItem[] = [
     to: '/audit',
     permission: 'audit.view',
   },
+  {
+    key: 'profile',
+    labelKey: 'nav.profile',
+    icon: 'pi pi-user',
+    to: '/profile',
+  },
+  {
+    key: 'tokens',
+    labelKey: 'nav.tokens',
+    icon: 'pi pi-key',
+    to: '/tokens',
+  },
 ]
